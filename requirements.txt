@@ -1,0 +1,5 @@
+curses
+ccxt
+shrimpy-python
+matplotlib
+backtrader
