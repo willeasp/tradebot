@@ -1,10 +1,16 @@
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 import backtrader as bt
+
+import operator
 
 class PositiveAverage(bt.Strategy):
     """ A simple moving average strategy """
     params = (
-        ('maperiod', 20),
-        ('printlog', False),
+        ('maperiod', 10),
+        ('printlog', True),
+        ('daysofrisingma', 3),
+        ('daysofdroppingma', 3),
     )
 
     def log(self, txt, dt=None, doprint=False):
@@ -64,6 +70,13 @@ class PositiveAverage(bt.Strategy):
         self.log('OPERATION PROFIT, GROSS %.2f, NET %.2f' %
                  (trade.pnl, trade.pnlcomm))
 
+    def _ma_in_row(self, op, lim):
+        for day in range(lim):
+            if not op(self.sma[-day], self.sma[-day -1]):
+                return False
+        return True
+
+
     def next(self):
         # Simply log the closing price of the series from the reference
         self.log('Close, %.2f' % self.dataclose[0])
@@ -76,7 +89,7 @@ class PositiveAverage(bt.Strategy):
         if not self.position:
 
             # Not yet ... we MIGHT BUY if ...
-            if self.dataclose[0] > self.sma[0]:
+            if self._ma_in_row(operator.gt, self.params.daysofrisingma):
 
                 # BUY, BUY, BUY!!! (with all possible default parameters)
                 self.log('BUY CREATE, %.2f' % self.dataclose[0])
@@ -86,7 +99,7 @@ class PositiveAverage(bt.Strategy):
 
         else:
 
-            if self.dataclose[0] < self.sma[0]:
+            if self._ma_in_row(operator.lt, self.params.daysofdroppingma):
                 # SELL, SELL, SELL!!! (with all possible default parameters)
                 self.log('SELL CREATE, %.2f' % self.dataclose[0])
 
@@ -94,5 +107,7 @@ class PositiveAverage(bt.Strategy):
                 self.order = self.sell()
 
     def stop(self):
-        self.log('(MA Period %2d) Ending Value %.2f' %
-                 (self.params.maperiod, self.broker.getvalue()), doprint=True)
+        self.log('(MA Period %2d) Ending Value %.2f, days_rising: %.2d, days_dropping: %.2d' %
+                 (self.params.maperiod, self.broker.getvalue(), self.params.daysofrisingma, self.params.daysofdroppingma), doprint=True)
+
+DefaultStrategy = PositiveAverage

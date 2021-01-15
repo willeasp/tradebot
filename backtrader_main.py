@@ -6,7 +6,7 @@ import datetime  # For datetime objects
 #import sys  # To find out the script name (in argv[0])
 
 # from backtrader.strategies.sma_crossover import MA_CrossOver as Strategy
-from strategies import PositiveAverage as Strategy
+from strategies import DefaultStrategy as Strategy
 
 # Import the backtrader platform
 import backtrader as bt
@@ -15,13 +15,26 @@ if __name__ == '__main__':
     # Create a cerebro entity
     cerebro = bt.Cerebro()
 
-    # Add a strategy
-    cerebro.addstrategy(Strategy)
+    optimizer = False
 
-    # Add a strategy
-    # strats = cerebro.optstrategy(
-    #     Strategy,
-    #     maperiod=range(30, 60))
+    if optimizer:
+        # Add a strategy
+        strats = cerebro.optstrategy(
+            Strategy,
+            maperiod=range(3, 10),
+            printlog=False,
+            daysofrisingma=range(2, 5),
+            daysofdroppingma=range(2, 5)
+        )
+    else:
+        # Add a strategy
+        cerebro.addstrategy(
+            Strategy,
+            maperiod=9,
+            daysofrisingma=4,
+            daysofdroppingma=3
+        )
+
 
     # Datas are in a subfolder of the samples. Need to find where the script is
     # because it could have been called from anywhere
@@ -31,9 +44,9 @@ if __name__ == '__main__':
     data = bt.feeds.YahooFinanceCSVData(
         dataname=datapath,
         # Do not pass values before this date
-        fromdate=datetime.datetime(2000, 1, 1),
+        fromdate=datetime.datetime(2003, 1, 1),
         # Do not pass values after this date
-        todate=datetime.datetime(2003, 1, 1),
+        todate=datetime.datetime(2005, 12, 31),
         reverse=False)
 
     # Add the Data Feed to Cerebro
@@ -57,4 +70,5 @@ if __name__ == '__main__':
     # Print out the final result
     print('Final Portfolio Value: %.2f' % cerebro.broker.getvalue())
 
-    cerebro.plot(path="./plot")
+    if not optimizer:
+        cerebro.plot(path="./plot")
