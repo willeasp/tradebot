@@ -1,3 +1,5 @@
+""" The strategies in this file is made by willeasp """
+
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 import backtrader as bt
@@ -5,7 +7,10 @@ import backtrader as bt
 import operator
 
 class PositiveAverage(bt.Strategy):
-    """ A simple moving average strategy """
+    """ A strategy that buys when the SimpleMovingAverage is going up and sells when it goes down. 
+        Simple as that. 
+    """
+    
     params = (
         ('maperiod', 10),
         ('printlog', True),
@@ -109,5 +114,6 @@ class PositiveAverage(bt.Strategy):
     def stop(self):
         self.log('(MA Period %2d) Ending Value %.2f, days_rising: %.2d, days_dropping: %.2d' %
                  (self.params.maperiod, self.broker.getvalue(), self.params.daysofrisingma, self.params.daysofdroppingma), doprint=True)
+
 
 DefaultStrategy = PositiveAverage

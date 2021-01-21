@@ -1,3 +1,5 @@
+""" Just testing out the ccxt api """
+
 import ccxt
 
 hitbtc = ccxt.hitbtc()

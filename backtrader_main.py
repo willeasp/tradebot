@@ -1,3 +1,5 @@
+""" This file is used when running strategies from strategies.py  """
+
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
@@ -44,9 +46,9 @@ if __name__ == '__main__':
     data = bt.feeds.YahooFinanceCSVData(
         dataname=datapath,
         # Do not pass values before this date
-        fromdate=datetime.datetime(2003, 1, 1),
+        fromdate=datetime.datetime(2008, 1, 1),
         # Do not pass values after this date
-        todate=datetime.datetime(2005, 12, 31),
+        todate=datetime.datetime(2009, 12, 31),
         reverse=False)
 
     # Add the Data Feed to Cerebro

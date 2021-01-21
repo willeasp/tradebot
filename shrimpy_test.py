@@ -1,3 +1,5 @@
+""" Just testing out the shrimpy api """
+
 from api_keys import public_key, secret_key
 import shrimpy
 import json

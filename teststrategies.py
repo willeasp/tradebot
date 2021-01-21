@@ -1,3 +1,7 @@
+""" The strategies in this file was created following the quickstart guide at https://www.backtrader.com/docu/quickstart/quickstart/ """
+
+from __future__ import (absolute_import, division, print_function,
+                        unicode_literals)
 import backtrader as bt
 
 class TestStrategy1(bt.Strategy):

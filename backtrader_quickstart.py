@@ -1,3 +1,7 @@
+""" 
+This file was created when following the quickstart tutorial by Backtrader at https://www.backtrader.com/docu/quickstart/quickstart/
+ """
+
 from __future__ import (absolute_import, division, print_function,
                         unicode_literals)
 
